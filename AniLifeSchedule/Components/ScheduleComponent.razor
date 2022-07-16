@@ -1,0 +1,141 @@
+﻿@for (var i = 0; i < Models.Count; i++)
+{
+    int index = i;
+
+    <div class="p-2 mx-1 my-1 bg-light shadow border border-secondary rounded" style="width: 25rem;">
+    @if (!Models[index].IsEditable)
+    {
+        <div class="row">
+            <div class="col-6">
+                <img class="img-fluid" src="@Models[index].ImageUrl" />
+            </div>
+
+            <div class="col-6 text-center">
+                <p class="fw-bold">RUSSIAN TITLE</p>
+                <p class="empty">@Models[index].TitleRussian</p>
+                 
+                <p class="fw-bold">ROMAJI TITLE</p>
+                <p class="empty">@Models[index].TitleRomaji</p>
+
+                <p class="fw-bold">CURRENT EPISODE</p>
+                <p>@Models[index].CurrentEpisode</p>
+
+                <p class="fw-bold">COUNT EPISODES</p>
+                <p class="empty">@Models[index].Episodes</p>
+
+                <p class="fw-bold">RELEASE DATE</p>
+                <p>@Models[index].ReleaseDate</p>
+
+                <p class="fw-bold">STATUS</p>
+                <p>@Models[index].Status</p>
+
+                <p class="fw-bold">FORMAT</p>
+                <p>@Models[index].Format</p>
+            </div>
+         </div>
+
+        <div class="row">
+            <div class="d-flex justify-content-center gap-3 p-1">
+                <button class="btn btn-outline-info" @onclick="() => Edit(Models[index])">Edit</button>
+                <button class="btn btn-outline-secondary" @onclick="() => GetRussianTitle(index)">Get Russian Title</button>
+                <button class="btn btn-outline-danger" @onclick="() => Remove(index)">Remove</button>
+            </div>
+        </div>
+    }
+    else
+    {
+    <EditForm Model="@Models[index]" OnSubmit="() => Save(index, Models[index])">
+        <div class="row gap-1"> 
+            <div class="form-floating">
+                <InputText @bind-Value="@Models[index].TitleRussian" class="form-control" id="floatingRussianTitle" placeholder="Russian Title" />
+                <label class="px-4" for="floatingRussianTitle">Russian Title</label>
+            </div>
+
+            <div class="form-floating">
+                <InputText @bind-Value="@Models[index].TitleRomaji" class="form-control" id="floatingRomajiTitle" placeholder="Romaji Title" />
+                <label class="px-4" for="floatingRomajiTitle">Romaji Title</label>
+            </div>
+
+            <div class="form-floating">
+                <InputNumber @bind-Value="@Models[index].CurrentEpisode" class="form-control" id="floatingCurrentEpisode" placeholder="Current Episode" />
+                <label class="px-4" for="floatingCurrentEpisode">Current Episode</label>
+            </div>
+
+            <div class="form-floating">
+                <InputNumber @bind-Value="@Models[index].Episodes" class="form-control" id="floatingCountEpisodes" placeholder="Count Episodes" />
+                <label class="px-4" for="floatingCountEpisodes">Count Episodes</label>
+            </div>
+
+            <div class="form-floating">
+                <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Models[index].ReleaseDate" class="form-control" id="floatingReleaseDate" placeholder="Release Date" />
+                <label class="px-4" for="floatingReleaseDate">Release Date</label>
+            </div>
+
+            <div class="form-floating">
+                <InputText @bind-Value="@Models[index].ImageUrl" class="form-control" id="floatingImageUrl" placeholder="Image URL" />
+                <label class="px-4" for="floatingImageUrl">Image URL</label>
+            </div>
+
+            <div class="form-floating">
+                <InputSelect @bind-Value="@Models[index].Status" class="form-control" id="floatingStatus" placeholder="Status">
+                    @foreach (var status in Enum.GetValues(typeof(Status)))
+                    {
+                        <option value="@status">@status</option>
+                    }
+                 </InputSelect>
+
+                <label class="px-4" for="floatingStatus">Status</label>
+            </div>
+
+            <div class="form-floating">
+                <InputSelect @bind-Value="@Models[index].Format" class="form-control" id="floatingFormat" placeholder="Format">
+                    @foreach (var format in Enum.GetValues(typeof(Format)))
+                    {
+                        <option value="@format">@format</option>
+                    }
+                 </InputSelect>
+
+                <label class="px-4" for="floatingFormat">Format</label>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center px-5 py-2">
+            <button type="submit" class="btn btn-outline-info">Save</button>
+        </div>
+    </EditForm>
+    }
+    </div>
+}
+
+@code 
+{
+
+    [Parameter]
+    public System.Collections.ObjectModel.ObservableCollection<ScheduleModel> Models { get; set; } = new System.Collections.ObjectModel.ObservableCollection<ScheduleModel>();
+
+    [Parameter]
+    public EventCallback<int> OnGetRussianTitle { get; set; }
+
+    private int id;
+
+    private void Edit(ScheduleModel model)
+    {
+        model.IsEditable = true;
+    }
+
+    private void Save(int id, ScheduleModel newModel)
+    {
+        newModel.IsEditable = false;
+        Models[id] = newModel;
+    }
+
+    private void Remove(int index)
+    {
+        Models.RemoveAt(index);
+    }
+
+    private async Task GetRussianTitle(int id)
+    {
+        if (!string.IsNullOrEmpty(Models[id].TitleRomaji)) await OnGetRussianTitle.InvokeAsync(id);
+    }
+}
