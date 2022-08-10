@@ -9,7 +9,7 @@ namespace AniLifeSchedule.Models
         public string TitleRussian { get; set; } = string.Empty;
         public string TitleRomaji { get; set; } = string.Empty;
 
-        public int CurrentEpisode { get; set; }
+        public string CurrentEpisode { get; set; } = string.Empty;
         public int? Episodes { get; set; }
         
         public DateTime ReleaseDate { get; set; }

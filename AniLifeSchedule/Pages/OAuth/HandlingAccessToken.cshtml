@@ -1,0 +1,25 @@
+﻿@page
+@model AniLifeSchedule.Pages.OAuth.HandlingAccessTokenModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="authorize">
+    <div class="authorize-status text-center">
+        <p class="authorize-status-title">Authorization Status</p>
+
+        @if (Model.IsAuthorized)
+        {
+            <p class="text-success">
+                @Model.Message
+            </p>
+        }else 
+        {
+            <p class="text-danger">
+                @Model.Message
+            </p>
+        }
+
+        <a class="btn btn-primary" href="/">Go to Schedule</a>
+    </div>
+</div>

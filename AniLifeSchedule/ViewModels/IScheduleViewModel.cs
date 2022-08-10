@@ -50,5 +50,19 @@ namespace AniLifeSchedule.ViewModels
         /// Sorts Model by date and time
         /// </summary>
         public void Sort();
+
+        /// <summary>
+        /// Invokes when Save method in ScheduleComponent is handles.
+        /// </summary>
+        /// <param name="id">Index of model</param>
+        public void SaveCallback(int id);
+
+        /// <summary>
+        /// Invokes when Remove method in ScheduleComponent is handles.
+        /// </summary>
+        /// <param name="id">Index of model</param>
+        public void RemoveCallback(int id);
+
+        public Task UploadFile();
     }
 }

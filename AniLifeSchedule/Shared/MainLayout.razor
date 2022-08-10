@@ -1,7 +1,11 @@
 ﻿@inherits LayoutComponentBase
+@using Blazored.Toast.Configuration
 
 <PageTitle>AniLifeSchedule</PageTitle>
 
 <div class="container">
     @Body
 </div>
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="10" />

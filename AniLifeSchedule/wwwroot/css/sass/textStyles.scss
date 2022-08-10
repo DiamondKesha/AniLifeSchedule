@@ -1,0 +1,24 @@
+﻿.text-center
+{
+  text-align: center;
+}
+
+p:empty::before {
+  content: "?";
+  color: dimgray;
+}
+
+.text-success
+{
+  color: $color-success;
+}
+
+.text-danger
+{
+  color: $color-danger;
+}
+
+.text-small
+{
+    font-size: small;
+}

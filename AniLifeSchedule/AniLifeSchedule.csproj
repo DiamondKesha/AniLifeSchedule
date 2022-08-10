@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="GraphQL.Client" Version="4.0.2" />
     <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="4.0.2" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="5.3.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.WebAssembly" Version="2.8.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.7" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.7" />
     <PackageReference Include="SkiaSharp" Version="2.88.0" />
     <PackageReference Include="SkiaSharp.HarfBuzz" Version="2.88.0" />
@@ -30,13 +32,20 @@
     <EmbeddedResource Remove="Mappers\**" />
     <None Remove="Mappers\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\OAuth\HandlingAccessToken.cshtml.cs" />
+    <Compile Remove="Pages\OAuth\RedirectAfterAuthorize.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="Pages\OAuth\HandlingAccessToken.cshtml" />
+    <Content Remove="Pages\OAuth\RedirectAfterAuthorize.cshtml" />
+  </ItemGroup>
     
   <ItemGroup>
-    <None Include="wwwroot\css\bootstrap\bootstrap.min.css.map" />
-    <None Include="wwwroot\css\open-iconic\FONT-LICENSE" />
-    <None Include="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
-    <None Include="wwwroot\css\open-iconic\ICON-LICENSE" />
-    <None Include="wwwroot\css\open-iconic\README.md" />
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

@@ -93,11 +93,11 @@ namespace AniLifeSchedule.Services.Implementations
 
         private readonly NavigationManager _hostEnv;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ScheduleImage _scheduleImageConfiguration;
+        private readonly ScheduleConfiguration _scheduleImageConfiguration;
 
         private HttpClient httpClient;
 
-        public ImageCreatorService(IHttpClientFactory httpClientFactory, IOptions<ScheduleImage> scheduleImageConfiguration, NavigationManager hostEnv)
+        public ImageCreatorService(IHttpClientFactory httpClientFactory, IOptions<ScheduleConfiguration> scheduleImageConfiguration, NavigationManager hostEnv)
         {
             _hostEnv = hostEnv;
             _httpClientFactory = httpClientFactory;
@@ -120,11 +120,8 @@ namespace AniLifeSchedule.Services.Implementations
             using SKImage outputImage = SKImage.FromBitmap(bitmap);
             using SKData bitmapData = outputImage.Encode(SKEncodedImageFormat.Jpeg, 80);
 
-            if (_scheduleImageConfiguration.IsSave)
-            {
-                using var fileStream = File.OpenWrite($"{_scheduleImageConfiguration.PathToSave}\\Schedule to {scheduleModel[0].ReleaseDate.ToShortDateString()}.jpg");
-                bitmapData.SaveTo(fileStream);
-            }
+            using var fileStream = File.OpenWrite($"{_scheduleImageConfiguration.PathToSave}\\{_scheduleImageConfiguration.Filename.Replace("{date}", scheduleModel[0].ReleaseDate.ToShortDateString())}.jpg");
+            bitmapData.SaveTo(fileStream);
 
             return Convert.ToBase64String(bitmapData.ToArray());
         }

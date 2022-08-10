@@ -1,35 +1,76 @@
 ﻿@page "/"
-@inject IScheduleViewModel viewModel
+@inject IScheduleViewModel ViewModel
+@inject INotifierService NotifierService
+@implements IDisposable
 
 <PageTitle>Schedule</PageTitle>
 
-<div class="row p-2 gx-2" style="height: 40px;">
-    <div class="col-4 d-flex flex-row justify-content-start gap-2">
-        <EditForm Model="@viewModel">
-            <InputDate class="form-control" @bind-Value="viewModel.DateInput"/>
-        </EditForm>
+<div class="navbar">
 
-        <button class="btn btn-primary" @onclick="viewModel.GetSchedule">Get</button>
-    </div>
+    <AuthorizeLayout />
 
-    <div class="col-4 d-flex justify-content-center">
-        <button class="btn btn-primary" @onclick="viewModel.Generate">Generate Image</button>
-    </div>
+    <div class="navbar-main navbar-background">
+        <div class="navbar-item">
+            <EditForm class="form-input" Model="@ViewModel">
+                <InputDate @bind-Value="ViewModel.DateInput" id="date" placeholder=" " />
+                <label for="date">Schedule Date</label>
+            </EditForm>
 
-     <div class="col-4 d-flex justify-content-end gap-2">
-         <EditForm Model="@viewModel">
-            <InputText class="form-control" placeholder="ID or Title from shikimori" @bind-Value="viewModel.ShikimoriInput"/>
-         </EditForm>
+            <button class="btn btn-primary text-small" @onclick="ViewModel.GetSchedule">Get</button>
+        </div>
 
-        <button @onclick="viewModel.AddItem" class="btn btn-primary">Add</button>
-        <button @onclick="viewModel.Sort" class="btn btn-primary">Sort</button>
+        <div class="navbar-item">
+            <button class="btn btn-primary text-small" @onclick="ViewModel.Generate">Generate Image</button>
+        </div>
+
+        <div class="navbar-item">
+            <EditForm class="form-input" Model="@ViewModel">
+                <InputText @bind-Value="ViewModel.ShikimoriInput" id="shikimoriSearch" placeholder=" " />
+                <label for="shikimoriSearch">Shikimori Search</label>
+            </EditForm>
+
+            <button class="btn btn-primary text-small" @onclick="ViewModel.AddItem">Add</button>
+            <button class="btn btn-primary text-small" @onclick="ViewModel.Sort">Sort</button>
+        </div>
     </div>
 </div>
 
-<div class="row justify-content-center my-3">
-    <AniLifeSchedule.Components.ScheduleComponent Models="@viewModel.Models" OnGetRussianTitle="@viewModel.GetRussianTitle"/>
+
+<div class="schedule-content">
+    <AniLifeSchedule.Components.ScheduleComponent Models="@ViewModel.Models" 
+        OnGetRussianTitle="@ViewModel.GetRussianTitle" OnSave="@ViewModel.SaveCallback" OnRemove="@ViewModel.RemoveCallback"/>
 </div>
 
-<div class="row">
-    <img src="data:image/jpeg;base64,@viewModel.OutputImageData"/>
+<div class="generated-image">
+    <div class="generated-image-header">
+        <p class="generated-image-text text-center">Generated Image</p>
+
+        <button class="btn btn-primary" @onclick="ViewModel.UploadFile">Upload and Post</button>
+
+        <a class="btn btn-primary" href="CreatePosts">Create Posts</a>
+    </div>
+
+    <div>
+        @if(!string.IsNullOrWhiteSpace(ViewModel.OutputImageData))
+        {
+            <img class="generated-image-img" src="data:image/jpeg;base64,@ViewModel.OutputImageData"/>
+        }
+    </div>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NotifierService.Subscribe(ViewModel, OnNotify);
+    }
+
+    private async Task OnNotify()
+    {
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    public void Dispose()
+    {
+        NotifierService.Unsubscribe(ViewModel);
+    }
+}
