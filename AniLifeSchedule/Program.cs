@@ -7,6 +7,7 @@ using AniLifeSchedule.ViewModels.Implementations;
 using Blazored.Toast;
 using Polly;
 using Polly.Timeout;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,14 +53,16 @@ var retryPolicy = Policy
         TimeSpan.FromSeconds(15)
     });
 
-/*var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(5), (ctx, t, task, e) =>
+//var swallowExceptions = Policy.Handle<Exception>().FallbackAsync(ct => { return Task.CompletedTask; });
+
+var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(5), (ctx, t, task, e) =>
 {
     Console.WriteLine(e.Message);
     return Task.CompletedTask;
-});*/
+});
 
-var policies = retryPolicy;
-
+//var policyWrap = Policy.WrapAsync(swallowExceptions, timeoutPolicy);
+var policies = timeoutPolicy.WrapAsync(retryPolicy);
 
 builder.Services.AddHttpClient("Anilist", client =>
 {

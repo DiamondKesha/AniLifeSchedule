@@ -1,7 +1,5 @@
 ﻿@page "/"
 @inject IScheduleViewModel ViewModel
-@inject INotifierService NotifierService
-@implements IDisposable
 
 <PageTitle>Schedule</PageTitle>
 
@@ -57,20 +55,3 @@
         }
     </div>
 </div>
-
-@code {
-    protected override void OnInitialized()
-    {
-        NotifierService.Subscribe(ViewModel, OnNotify);
-    }
-
-    private async Task OnNotify()
-    {
-        await InvokeAsync(() => { StateHasChanged(); });
-    }
-
-    public void Dispose()
-    {
-        NotifierService.Unsubscribe(ViewModel);
-    }
-}

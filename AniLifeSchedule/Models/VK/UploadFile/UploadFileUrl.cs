@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AniLifeSchedule.Models.VK.UploadResponse
+namespace AniLifeSchedule.Models.VK.UploadFile
 {
     public class UploadFileUrl
     {
         [JsonPropertyName("upload_url")]
-        public string File { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
     }
 }

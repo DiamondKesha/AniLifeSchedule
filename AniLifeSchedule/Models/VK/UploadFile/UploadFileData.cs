@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AniLifeSchedule.Models.VK.UploadResponse
+namespace AniLifeSchedule.Models.VK.UploadFile
 {
     public class UploadFileData
     {

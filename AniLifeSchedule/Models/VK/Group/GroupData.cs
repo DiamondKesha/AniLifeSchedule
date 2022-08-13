@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AniLifeSchedule.Models.VK.GroupResponse
+namespace AniLifeSchedule.Models.VK.Group
 {
     public class GroupData
     {

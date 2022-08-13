@@ -1,15 +1,12 @@
 ﻿using AniLifeSchedule.Models.Configurations;
 using AniLifeSchedule.Models.VK;
-using AniLifeSchedule.Models.VK.GroupResponse;
+using AniLifeSchedule.Models.VK.Group;
 using AniLifeSchedule.Models.VK.SaveFile;
-using AniLifeSchedule.Models.VK.UploadResponse;
-using AniLifeSchedule.Models.VK.WallPostResponse;
+using AniLifeSchedule.Models.VK.UploadFile;
+using AniLifeSchedule.Models.VK.WallPost;
 using AniLifeSchedule.Models.VK.Wrappers;
 using AniLifeSchedule.Models.Wrapper;
 using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace AniLifeSchedule.Services.Implementations
 {
@@ -29,7 +26,7 @@ namespace AniLifeSchedule.Services.Implementations
             httpClient = _httpClientFactory.CreateClient("VK");
         }
 
-        public async Task<IResult<WallPostResponse>> CreatePost(string token, string text, string attachments, DateTime? time = null)
+        public async Task<IResult<WallPost>> CreatePost(string token, string text, string attachments, DateTime? time = null)
         {
             string urlApi = $"wall.post?access_token={token}&owner_id=-{_vkConfig.GroupId}&message={text}&attachments={attachments}&v={_vkConfig.ApiVersion}";
 
@@ -37,7 +34,7 @@ namespace AniLifeSchedule.Services.Implementations
 
             var result = await httpClient.GetAsync(urlApi);
 
-            var data = (IResult<WallPostResponse>) await GetData<WallPostResponse>(result, true, true);
+            var data = (IResult<WallPost>) await GetData<WallPost>(result, true, true);
 
             return data;
         }

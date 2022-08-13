@@ -7,25 +7,25 @@ namespace AniLifeSchedule.Services.Implementations
     public class ShikimoriService : IShikimoriService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private HttpClient httpClient;
+        private readonly HttpClient _httpClient;
 
         public ShikimoriService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
 
-            httpClient = _httpClientFactory.CreateClient("Shikimori");
+            _httpClient = _httpClientFactory.CreateClient("Shikimori");
         }
 
         public async Task<List<Anime>> GetAnime(int id)
         {
-            string data = await httpClient.GetStringAsync($"https://shikimori.one/api/animes?ids={id}");
+            string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?ids={id}");
 
             return JsonSerializer.Deserialize<List<Anime>>(data);
         }
 
         public async Task<List<Anime>> GetAnime(string title)
         {
-            string data = await httpClient.GetStringAsync($"https://shikimori.one/api/animes?search={title}");
+            string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?search={title}");
 
             return JsonSerializer.Deserialize<List<Anime>>(data);
         }

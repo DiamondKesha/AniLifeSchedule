@@ -3,8 +3,6 @@ using AniLifeSchedule.Enums;
 using AniLifeSchedule.Models;
 using AniLifeSchedule.Models.Configurations;
 using AniLifeSchedule.Models.Shikimori;
-using AniLifeSchedule.Models.VK;
-using AniLifeSchedule.Models.VK.UploadResponse;
 using AniLifeSchedule.Services;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
@@ -29,25 +27,23 @@ namespace AniLifeSchedule.ViewModels.Implementations
         public string OutputImageData { get => _outputImageData; set => _outputImageData = value; }
 
         private readonly ScheduleConfiguration _scheduleConfig;
+        private readonly ScheduleTransferData _scheduleData;
         private readonly NavigationManager _hostEnv;
         private readonly IAnilistService _anilistService;
         private readonly IImageCreatorService _imageService;
         private readonly IShikimoriService _shikimoriService;
-        private readonly INotifierService _notifierService;
-        private readonly ScheduleTransferData _scheduleData;
         private readonly IVKService _vkService;
         private readonly ICookiesService _cookiesService;
         private readonly IToastService _toastService;
 
-        public ScheduleViewModel(NavigationManager hostEnv,
+        public ScheduleViewModel(IOptions<ScheduleConfiguration> scheduleConfig,
+                                 ScheduleTransferData scheduleData,
+                                 NavigationManager hostEnv,
                                  IImageCreatorService imageService,
                                  IAnilistService anilistService,
                                  IShikimoriService shikimoriService,
-                                 INotifierService notifierService,
-                                 ScheduleTransferData scheduleData,
                                  IVKService vkService,
                                  ICookiesService cookiesService,
-                                 IOptions<ScheduleConfiguration> scheduleConfig,
                                  IToastService toastService
             )
         {
@@ -55,7 +51,6 @@ namespace AniLifeSchedule.ViewModels.Implementations
             _imageService = imageService;
             _anilistService = anilistService;
             _shikimoriService = shikimoriService;
-            _notifierService = notifierService;
             _scheduleData = scheduleData;
             _vkService = vkService;
             _cookiesService = cookiesService;
@@ -190,14 +185,21 @@ namespace AniLifeSchedule.ViewModels.Implementations
         {
             Regex regex = new(@"doc-\w+\d+?");
             string filename = _scheduleConfig.Filename.Replace("{date}", DateInput.ToShortDateString());
+            string filePath = $"{_scheduleConfig.PathToSave}\\{filename}.jpg";
 
-            _toastService.ShowInfo("Try to get uplaod and post image to group VK...");
+            _toastService.ShowInfo("Try to upload and post image to group VK...");
+
+            if (!File.Exists(filePath))
+            {
+                _toastService.ShowError($"Image file didn't exists! Try to generate and then try again.\n{filePath}");
+                return;
+            }
 
             var upload = await _vkService.GetWallUploadServer(_cookiesService.AccessToken);
 
             if (upload.Succeeded)
             {
-                var uploadFile = await _vkService.UploadFileToServer(upload.Data.File, await File.ReadAllBytesAsync($"{_scheduleConfig.PathToSave}\\{filename}.jpg"), $"{filename}.jpg");
+                var uploadFile = await _vkService.UploadFileToServer(upload.Data.Url, await File.ReadAllBytesAsync(filePath), $"{filename}.jpg");
 
                 if (uploadFile.Succeeded)
                 {

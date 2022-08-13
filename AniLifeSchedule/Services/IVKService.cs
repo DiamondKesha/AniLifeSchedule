@@ -1,7 +1,7 @@
-﻿using AniLifeSchedule.Models.VK.GroupResponse;
+﻿using AniLifeSchedule.Models.VK.Group;
 using AniLifeSchedule.Models.VK.SaveFile;
-using AniLifeSchedule.Models.VK.UploadResponse;
-using AniLifeSchedule.Models.VK.WallPostResponse;
+using AniLifeSchedule.Models.VK.UploadFile;
+using AniLifeSchedule.Models.VK.WallPost;
 using AniLifeSchedule.Models.Wrapper;
 
 namespace AniLifeSchedule.Services
@@ -12,7 +12,7 @@ namespace AniLifeSchedule.Services
         /// Gets information about current authorized group by token
         /// </summary>
         /// <param name="token">Authorize token</param>
-        /// <returns>GroupResponse object</returns>
+        /// <returns>List of GroupData object</returns>
         public Task<IResult<List<GroupData>>> GetGroupInformation(string token);
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace AniLifeSchedule.Services
         /// <param name="attachments"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public Task<IResult<WallPostResponse>> CreatePost(string token, string text, string attachments, DateTime? time = null);
+        public Task<IResult<WallPost>> CreatePost(string token, string text, string attachments, DateTime? time = null);
 
         /// <summary>
         /// Gets server url for upload file to the server VK
