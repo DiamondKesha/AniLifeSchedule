@@ -1,0 +1,68 @@
+﻿.form-input, select {
+    padding: 0;
+    display: inline-block;
+}
+
+    .form-input input, .form-input select  {
+        padding-top: 18px;
+        padding-left: 7px;
+        border: 0.1em solid $color-secondary;
+        border-radius: $border-radius;
+        transition: all 0.5s;
+    }
+
+        .form-input input[type="date"]::-webkit-calendar-picker-indicator,
+        .form-input input[type="datetime-local"]::-webkit-calendar-picker-indicator
+        {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .form-input input:focus,
+        .form-input input:hover,
+        .form-input select:hover,
+        .form-input select:focus{
+            outline: none;
+            border-color: $color-info;
+        }
+
+            .form-input input:focus + label,
+            .form-input input:not(:placeholder-shown) + label,
+            .form-input select + label{
+                transform: translateX(0.25em) translateY(-2.3em) scale(0.75);
+                color: $color-secondary;
+            }
+
+        .form-input input::placeholder {
+            color: transparent;
+        }
+
+    .form-input label {
+        display: block;
+        position: absolute;
+        transform: translateY(-1.8em);
+        padding-left: 20px;
+        transform-origin: left top;
+        padding-left: 0.4em;
+        transition: all 0.3s;
+        pointer-events: none;
+        color: $color-secondary;
+    }
+
+    .form-input select
+    {
+        padding-left: 6px;
+    }
+
+ select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
+/* For IE10 */
+select::-ms-expand {
+  display: none;
+}

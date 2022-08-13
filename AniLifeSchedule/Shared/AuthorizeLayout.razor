@@ -1,0 +1,45 @@
+@inject IAuthorizeComponentViewModel ViewModel
+@inject INotifierService NotifierService
+@implements IDisposable
+
+@code
+{
+    private bool isNotify;
+
+    protected override void OnInitialized()
+    {
+        isNotify = NotifierService.Subscribe(ViewModel, OnNotify);
+    }
+
+    private async Task OnNotify()
+    {
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+
+    public void Dispose()
+    {
+        NotifierService.Unsubscribe(ViewModel);
+    }
+}
+
+
+<div class="navbar-auth navbar-background">
+    @if(!string.IsNullOrEmpty(ViewModel.Model.NameGroup))
+    {
+        @if (ViewModel.Model.IsAuthorized)
+        {
+            <img class="auth-img" src="@ViewModel.Model.ImageUrl" />
+            <p class="text-center text-success">Using group <br /> @ViewModel.Model.NameGroup</p>
+        }
+        else
+        {
+            <img class="auth-img" src="img/NotAuthorized.png" />
+            <a href="" class="text-center text-danger">@ViewModel.Model.NameGroup</a>
+        }
+    }
+    else
+    {
+        <img class="auth-img" src="img/NotAuthorized.png" />
+        <p class="text-center text-success">Try to authorize...</p>
+    }
+</div>

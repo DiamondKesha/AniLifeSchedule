@@ -1,0 +1,104 @@
+﻿.btn
+{
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: $border-radius;
+  text-align: center;
+  transition: all 0.5s;
+}
+
+.btn-primary
+{
+  color: white;
+  background-color: rgba($color-primary, 1);
+}
+
+.btn-primary:hover
+{
+  color: white;
+  background-color: rgba($color-primary-hover, 1);
+}
+
+.btn-outline-primary
+{
+  color: rgba($color-primary, 1);
+  background-color: transparent;
+  border: 1px rgba($color-primary, 1) solid;
+}
+
+.btn-outline-primary:hover
+{
+  color: white;
+  background-color: rgba($color-primary, 1);
+  border: 1px rgba($color-primary, 1) solid;
+}
+
+.btn-secondary
+{
+  color: white;
+  background-color: $color-secondary;
+}
+
+.btn-outline-secondary
+{
+  color: black;
+  background-color: transparent;
+  border: 1px $color-secondary solid;
+}
+
+.btn-outline-secondary:hover
+{
+  color: white;
+  background-color: $color-secondary;
+}
+
+.btn-danger
+{
+  color: white;
+  background-color: $color-danger;
+}
+
+.btn-outline-danger
+{
+  color: $color-danger;
+  background-color: transparent;
+  border: 1px $color-danger solid;
+}
+
+.btn-outline-danger:hover
+{
+  color: white;
+  background-color: $color-danger;
+}
+
+.btn-success
+{
+  color: white;
+  background-color: $color-success;
+}
+
+.btn-outline-success
+{
+  color: $color-success;
+  background-color: transparent;
+  border: 1px $color-success solid;
+}
+
+.btn-outline-success:hover
+{
+  color: white;
+  background-color: $color-success;
+}
+
+.btn-warning
+{
+  color: white;
+  background-color: $color-warning;
+}
+
+.btn-outline-warning
+{
+  color: $color-warning;
+  background-color: transparent;
+  border: 1px $color-warning solid;
+}

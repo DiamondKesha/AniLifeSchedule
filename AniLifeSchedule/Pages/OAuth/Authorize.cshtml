@@ -1,0 +1,26 @@
+﻿@page
+@model AniLifeSchedule.Pages.OAuth.AuthorizeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<div class="authorize-wrapper">
+    <div class="authorize-main text-center">
+        <p class="authorize-title">Authorization</p>
+
+        <a href="@Model.UrlAuthorization" target="_blank" class="btn btn-primary">Get Access Token</a>
+
+        <form method="post" class="form-input">
+            <div class="authorize-input">
+                <div class="form-input">
+                    <input asp-for="@Model.AccessTokenValue" id="accessToken" placeholder=" "/>
+                    <label for="accessToken">Access Token</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save in Cookies</button>
+            </div>
+        </form>
+
+    </div>
+</div>
