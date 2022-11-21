@@ -1,68 +1,51 @@
-﻿using AniLifeSchedule.Enums;
-using AniLifeSchedule.Models.Shikimori;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace AniLifeSchedule.Services.Implementations
+namespace AniLifeSchedule.Services.Implementations;
+
+public class ShikimoriService : IShikimoriService
 {
-    public class ShikimoriService : IShikimoriService
+    private readonly IHttpClientFactory _httpClientFactory = default!;
+    private readonly HttpClient _httpClient = default!;
+
+    public ShikimoriService(IHttpClientFactory httpClientFactory)
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly HttpClient _httpClient;
+        _httpClientFactory = httpClientFactory;
 
-        public ShikimoriService(IHttpClientFactory httpClientFactory)
+        _httpClient = _httpClientFactory.CreateClient("Shikimori");
+    }
+
+    public async Task<List<Anime>> GetAnime(int id)
+    {
+        string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?ids={id}");
+
+        return JsonSerializer.Deserialize<List<Anime>>(data);
+    }
+
+    public async Task<List<Anime>> GetAnime(string title)
+    {
+        string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?search={title}");
+
+        return JsonSerializer.Deserialize<List<Anime>>(data);
+    }
+
+    public Status GetStatusEnum(string value)
+    {
+        return value switch
         {
-            _httpClientFactory = httpClientFactory;
+            "anons" => Status.NOT_YET_RELEASED,
+            "ongoing" => Status.RELEASING,
+            "released" => Status.FINISHED,
+            _ => Status.RELEASING
+        };
+    }
 
-            _httpClient = _httpClientFactory.CreateClient("Shikimori");
-        }
-
-        public async Task<List<Anime>> GetAnime(int id)
+    public Format GetFormatEnum(string value)
+    {
+        return value switch
         {
-            string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?ids={id}");
-
-            return JsonSerializer.Deserialize<List<Anime>>(data);
-        }
-
-        public async Task<List<Anime>> GetAnime(string title)
-        {
-            string data = await _httpClient.GetStringAsync($"https://shikimori.one/api/animes?search={title}");
-
-            return JsonSerializer.Deserialize<List<Anime>>(data);
-        }
-
-        public Status GetStatusEnum(string value)
-        {
-            switch (value)
-            {
-                case "anons":
-                    return Status.NOT_YET_RELEASED;
-                    break;
-                case "ongoing":
-                    return Status.RELEASING;
-                    break;
-                case "released":
-                    return Status.FINISHED;
-                    break;
-                default:
-                    return Status.RELEASING;
-                    break;
-            }
-        }
-
-        public Format GetFormatEnum(string value)
-        {
-            switch (value)
-            {
-                case "tv":
-                    return Format.TV;
-                    break;
-                case "movie":
-                    return Format.MOVIE;
-                    break;
-                default:
-                    return Format.TV;
-                    break;
-            }
-        }
+            "tv" => Format.TV,
+            "movie" => Format.MOVIE,
+            _ => Format.TV,
+        };
     }
 }

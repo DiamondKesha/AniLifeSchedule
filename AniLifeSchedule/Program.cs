@@ -1,13 +1,6 @@
-using AniLifeSchedule.Data;
-using AniLifeSchedule.Models.Configurations;
-using AniLifeSchedule.Services;
 using AniLifeSchedule.Services.Implementations;
-using AniLifeSchedule.ViewModels;
-using AniLifeSchedule.ViewModels.Implementations;
-using Blazored.Toast;
 using Polly;
 using Polly.Timeout;
-using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +10,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpContextAccessor();
 
 // Thirtparty Services
-builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddBlazoredToast();
-
-// View Models
-builder.Services.AddTransient<IScheduleViewModel, ScheduleViewModel>();
-builder.Services.AddTransient<IAuthorizeComponentViewModel, AuthorizeComponentViewModel>();
-builder.Services.AddTransient<ICreatePostsViewModel, CreatePostsViewModel>();
 
 // Services
 builder.Services.AddScoped<INotifierService, NotifierService>();
@@ -55,9 +42,8 @@ var retryPolicy = Policy
 
 //var swallowExceptions = Policy.Handle<Exception>().FallbackAsync(ct => { return Task.CompletedTask; });
 
-var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(5), (ctx, t, task, e) =>
+var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(15), TimeoutStrategy.Optimistic, (ctx, t, task) =>
 {
-    Console.WriteLine(e.Message);
     return Task.CompletedTask;
 });
 

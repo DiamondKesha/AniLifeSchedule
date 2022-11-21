@@ -11,5 +11,9 @@
         public string Message { get; set; } = string.Empty;
 
         public string FileTags { get; set; } = string.Empty;
+
+        public bool DeleteVkDocumentAfterPost { get; set; }
+
+        public bool DeleteFileAfterPost { get; set; }
     }
 }

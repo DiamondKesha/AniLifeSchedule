@@ -3,14 +3,14 @@ using GraphQL;
 using GraphQL.Client.Http;
 using System.Text.Json;
 
-namespace AniLifeSchedule.Services.Implementations
-{
-    public class AnilistService : IAnilistService
-    {
-        private readonly IHttpClientFactory _httpClient;
+namespace AniLifeSchedule.Services.Implementations;
 
-        private readonly string _scheduleQuery =
-        @"query ($id: Int, $startDay: Int, $endDay: Int) { 
+public class AnilistService : IAnilistService
+{
+    private readonly IHttpClientFactory _httpClient = default!;
+
+    private readonly string _scheduleQuery =
+    @"query ($id: Int, $startDay: Int, $endDay: Int) { 
                     Page(page: 1) {
                         airingSchedules(id: $id, sort: TIME, airingAt_lesser: $endDay, airingAt_greater: $startDay) {
                             media {
@@ -24,37 +24,36 @@ namespace AniLifeSchedule.Services.Implementations
                                 averageScore
                                 isAdult } } } }";
 
-        public AnilistService(IHttpClientFactory httpClient)
+    public AnilistService(IHttpClientFactory httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task<AnilistData?> GetScheduleByDate(DateTime date)
+    {
+        var data = await SendGraphQuery(_scheduleQuery, new
         {
-            _httpClient = httpClient;
-        }
+            startDay = ((DateTimeOffset)date.Date).ToUnixTimeSeconds(),
+            endDay = ((DateTimeOffset)date.Date.AddDays(1).AddTicks(-1)).ToUnixTimeSeconds()
+        });
 
-        public async Task<AnilistData?> GetScheduleByDate(DateTime date)
+        return JsonSerializer.Deserialize<AnilistData>(data.ToString());
+    }
+
+    private async Task<object?> SendGraphQuery( string query, object? variables)
+    {
+        var httpClient = _httpClient.CreateClient("Anilist");
+
+        GraphQLHttpClient graphQLClient = new (new GraphQLHttpClientOptions(),
+            new GraphQL.Client.Serializer.SystemTextJson.SystemTextJsonSerializer(), httpClient);
+
+        GraphQLRequest request = new()
         {
-            var data = await SendGraphQuery(_scheduleQuery, new
-            {
-                startDay = ((DateTimeOffset)date.Date).ToUnixTimeSeconds(),
-                endDay = ((DateTimeOffset)date.Date.AddDays(1).AddTicks(-1)).ToUnixTimeSeconds()
-            });
+            Query = query,
+            Variables = variables
+        };
 
-            return JsonSerializer.Deserialize<AnilistData>(data.ToString());
-        }
-
-        private async Task<object?> SendGraphQuery( string query, object? variables)
-        {
-            var httpClient = _httpClient.CreateClient("Anilist");
-
-            GraphQLHttpClient graphQLClient = new GraphQLHttpClient(new GraphQLHttpClientOptions(),
-                new GraphQL.Client.Serializer.SystemTextJson.SystemTextJsonSerializer(), httpClient);
-
-            GraphQLRequest request = new GraphQLRequest
-            {
-                Query = query,
-                Variables = variables
-            };
-
-            var graphQLResponse = await graphQLClient.SendQueryAsync<object>(request);
-            return graphQLResponse.Data;
-        }
+        var graphQLResponse = await graphQLClient.SendQueryAsync<object>(request);
+        return graphQLResponse.Data;
     }
 }

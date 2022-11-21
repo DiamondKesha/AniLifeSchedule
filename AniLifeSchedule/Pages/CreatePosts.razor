@@ -1,16 +1,14 @@
 ﻿@page "/createposts"
 
-@inject ICreatePostsViewModel ViewModel
-
 <h3>CreatePosts</h3>
 
-@if(ViewModel.ScheduleData?.Schedule.Count == 0)
+@if(scheduleData?.Schedule.Count == 0)
 {
     <p>NO DATA</p>
 }
 else
 {
-     @foreach (var item in ViewModel.ScheduleData.Schedule)
+     @foreach (var item in scheduleData.Schedule)
     {
         <p>@item.TitleRomaji</p> <br />
     }
