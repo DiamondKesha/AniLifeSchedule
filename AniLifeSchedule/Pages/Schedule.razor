@@ -1,5 +1,4 @@
 ﻿@page "/"
-@inject IScheduleViewModel ViewModel
 
 <PageTitle>Schedule</PageTitle>
 
@@ -9,49 +8,51 @@
 
     <div class="navbar-main navbar-background">
         <div class="navbar-item">
-            <EditForm class="form-input" Model="@ViewModel">
-                <InputDate @bind-Value="ViewModel.DateInput" id="date" placeholder=" " />
+            <div class="form-input">
+                <input type="date" @bind="_dateInput" placeholder=" " />
                 <label for="date">Schedule Date</label>
-            </EditForm>
-
-            <button class="btn btn-primary text-small" @onclick="ViewModel.GetSchedule">Get</button>
+            </div>
+            
+            <button class="btn btn-primary text-small" @onclick="GetSchedule">Get</button>
         </div>
 
         <div class="navbar-item">
-            <button class="btn btn-primary text-small" @onclick="ViewModel.Generate">Generate Image</button>
+            <button class="btn btn-primary text-small" @onclick="Generate">Generate Image</button>
         </div>
 
         <div class="navbar-item">
-            <EditForm class="form-input" Model="@ViewModel">
-                <InputText @bind-Value="ViewModel.ShikimoriInput" id="shikimoriSearch" placeholder=" " />
+            <div class="form-input">
+                <input type="text" @bind="_titleInput" id="shikimoriSearch" placeholder=" " />
                 <label for="shikimoriSearch">Shikimori Search</label>
-            </EditForm>
+            </div>
 
-            <button class="btn btn-primary text-small" @onclick="ViewModel.AddItem">Add</button>
-            <button class="btn btn-primary text-small" @onclick="ViewModel.Sort">Sort</button>
+            <button class="btn btn-primary text-small" @onclick="AddItem">Add</button>
+            <button class="btn btn-primary text-small" @onclick="Sort">Sort</button>
         </div>
     </div>
 </div>
 
 
 <div class="schedule-content">
-    <AniLifeSchedule.Components.ScheduleComponent Models="@ViewModel.Models" 
-        OnGetRussianTitle="@ViewModel.GetRussianTitle" OnSave="@ViewModel.SaveCallback" OnRemove="@ViewModel.RemoveCallback"/>
+    <AniLifeSchedule.Components.ScheduleComponent Models="@_data" 
+        OnGetRussianTitle="@GetRussianTitle" OnSave="@SaveCallback" OnRemove="@RemoveCallback"/>
 </div>
 
 <div class="generated-image">
     <div class="generated-image-header">
         <p class="generated-image-text text-center">Generated Image</p>
 
-        <button class="btn btn-primary" @onclick="ViewModel.UploadFile">Upload and Post</button>
+        <button class="btn btn-primary" @onclick="UploadFile">Upload and Post</button>
 
         <a class="btn btn-primary" href="CreatePosts">Create Posts</a>
     </div>
 
     <div>
-        @if(!string.IsNullOrWhiteSpace(ViewModel.OutputImageData))
+        @if(!string.IsNullOrWhiteSpace(_outputImageData))
         {
-            <img class="generated-image-img" src="data:image/jpeg;base64,@ViewModel.OutputImageData"/>
+            <img class="generated-image-img" src="data:image/jpeg;base64,@_outputImageData"/>
         }
     </div>
 </div>
+
+    

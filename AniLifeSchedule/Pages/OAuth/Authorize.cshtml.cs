@@ -1,6 +1,3 @@
-using AniLifeSchedule.Models.Configurations;
-using AniLifeSchedule.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 
@@ -29,23 +26,10 @@ namespace AniLifeSchedule.Pages.OAuth
                 + $"&v={_vkAuth.ApiVersion}";
         }
 
-        public async Task OnPostAsync(string AccessTokenValue)
+        public Task OnPostAsync(string AccessTokenValue)
         {
             if (!string.IsNullOrEmpty(AccessTokenValue)) _cookieService.AccessToken = AccessTokenValue;
+            return Task.CompletedTask;
         }
-
-        //public IActionResult OnGet()
-        //{
-        /*return Redirect(_vkAuth.AuthorizeUrl
-            + $"client_id={_vkAuth.ClientId}"
-            + $"&display={_vkAuth.Display}"
-            + $"&redirect_uri={_vkAuth.RedirectUrl}"
-            //+ $"&group_ids={_vkAuth.GroupId}"
-            + $"&scope={_vkAuth.Scope}"
-            + $"&response_type={_vkAuth.ResponseType}"
-            + $"&v={_vkAuth.ApiVersion}");*/
-
-
-        //}
     }
 }
