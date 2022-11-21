@@ -1,0 +1,14 @@
+﻿• 21.11.2022
+Changes:
+	- ViewModels replaced to Code Behaind;
+	- Some changes in timeout;
+	- Web Icon;
+	- Other code changes.
+
+Added:
+	- Functions for deleting files after post (DeleteVkDocumentAfterPost, DeleteFileAfterPost in appsettings for control delete or not);
+	- GlobalUsings;
+	- Correct setting of Status when adding item to schedule.
+
+Fixed:
+	- Now if you do not post schedule to the right time, post on the wall will be posted immediately.
