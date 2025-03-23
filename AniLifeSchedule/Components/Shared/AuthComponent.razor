@@ -1,0 +1,28 @@
+﻿@if(!_isInitialize && !_isAuthorized)
+{
+    <div class="pa-4 gap-2">
+        Trying to log in...
+    </div>
+}
+else if (_isAuthorized)
+{
+    <div class="d-flex gap-2">
+        <div>
+            <MudAvatar Size="Size.Medium">
+                <MudImage Src="@_groupData.Photo200"></MudImage>
+            </MudAvatar>
+        </div>
+
+        <div class="flex-grow-1 align-self-center">
+            <MudLink Href="/auth">
+                @_groupData.Name (Id: @_groupData.Id) <br />
+            </MudLink>
+        </div>
+    </div>
+}
+else if(!_isAuthorized && _isInitialize)
+{
+    <div class="pa-4 gap-2">
+        <MudButton OnClick="() => NavigateToAuthPage()">Log In</MudButton>
+    </div>
+}

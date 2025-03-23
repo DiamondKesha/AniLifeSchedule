@@ -1,0 +1,104 @@
+﻿@page "/"
+
+<PageTitle>Create Schedule</PageTitle>
+
+<div class="d-flex flex-row justify-space-between mt-3 mb-3">
+    <div class="d-flex flex-row gap-2 align-center">
+        <MudDatePicker Label="Date" Margin="Margin.None" @bind-Date="@_dateInput" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Start" Variant="Variant.Filled" Color="Color.Primary" aria-label="get schedule"
+                       OnClick="@(async () => await GetSchedule())"/>
+    </div>
+    
+    <div>
+        <MudIconButton Icon="@Icons.Material.Filled.Image" Variant="Variant.Filled" Color="Color.Primary" aria-label="Generate image" 
+                       OnClick="@(async () => await GenerateImage())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Search" Variant="Variant.Filled" Color="Color.Primary" aria-label="Get anime from shikimori" 
+                       OnClick="@(async () => await GetFromShikimori())"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Create" Variant="Variant.Filled" Color="Color.Primary" aria-label="Add new card" 
+                       OnClick="@(async () => await AddCard())"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Sort" Variant="Variant.Filled" Color="Color.Primary" aria-label="Sort by a date"
+                       OnClick="SortCards" />
+    </div>
+</div>
+
+@if(_scheduleModels.Count == 0)
+{
+    <MudText Align="Align.Center" Color="Color.Error">Get a schedule or add manually.</MudText>
+}
+else
+{
+    <MudGrid>
+        @for (int i = 0; i < _scheduleModels.Count; i++)
+        {
+            int index = i;
+
+            <MudItem xs="3">
+                <MudPaper Class="d-flex flex-column gap-1 pa-2">
+                    <div class="d-flex flex-row gap-3 justify-center align-center">
+                        <div>
+                            <MudImage Src="@_scheduleModels[index].ImageUrl" Height="230" Width="153" />
+                        </div>
+
+                        <div>
+                            <MudText Align="Align.Center">
+                                <b>Russian Title</b><br />
+                                @_scheduleModels[index].Titles.Russian
+                            </MudText>
+
+                            <MudText Align="Align.Center">
+                                <b>Romaji Title</b><br />
+                                @_scheduleModels[index].Titles.Romaji
+                            </MudText>
+
+                            <MudText Align="Align.Center">
+                                <b>Current Episode / Episodes</b><br />
+                                @_scheduleModels[index].CurrentAiringEpisode / @_scheduleModels[index].Episodes
+                            </MudText>
+
+                            <MudText Align="Align.Center">
+                                <b>Episode release date</b><br />
+                                @_scheduleModels[index].EpisodeReleaseDate
+                            </MudText>
+
+                            <MudText Align="Align.Center">
+                                <b>Status</b><br />
+                                @_scheduleModels[index].Status
+                            </MudText>
+
+                            <MudText Align="Align.Center">
+                                <b>Format</b><br />
+                                @_scheduleModels[index].Format
+                            </MudText>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row gap-3 justify-center align-center">
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Primary" aria-label="Edit"
+                                       OnClick="@(async () => await EditCard(index))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Translate" Variant="Variant.Filled" Color="Color.Primary" aria-label="Get russian title"
+                                       OnClick="@(async () => await GetRussianTitle(index))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Remove" Variant="Variant.Filled" Color="Color.Primary" aria-label="Remove"
+                                       OnClick="@(() => RemoveCard(index))" />
+                    </div>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@if (!string.IsNullOrWhiteSpace(_generatedImage))
+{
+    <div class="mt-3 mb-3">
+
+        <div class="d-flex flex-row justify-end">
+            <MudIconButton Icon="@Icons.Material.Filled.PostAdd" Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async () => await CreatePost())" aria-label="Post" />
+        </div>
+
+        <div class="w-100 d-flex flex-row justify-center pa-1">
+            <img Src="data:image/jpeg;base64,@_generatedImage" />
+        </div>
+        
+    </div>
+    
+}

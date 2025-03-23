@@ -1,0 +1,23 @@
+﻿@using AniLifeSchedule.Models.Enums
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="Value" Label="Title or ids" />
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" OnClick="Submit">Search</MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code
+{
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+
+    public string Value { get; set; } = string.Empty;
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(Value));
+
+    private void Cancel() => MudDialog.Close(DialogResult.Cancel());
+}

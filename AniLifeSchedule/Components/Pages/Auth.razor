@@ -1,0 +1,65 @@
+﻿@layout AuthLayout
+@page "/auth"
+
+@using AniLifeSchedule.Components.Layout
+
+<PageTitle>Auth</PageTitle>
+
+@if(_isInitialize)
+{
+    <div class="align-self-center">
+
+        @if (!_isAuthorized && !_isParametersProvided)
+        {
+            <MudButton OnClick="OnButtonAuthorizePressed"
+                       Variant="Variant.Filled" Color="Color.Primary"
+                       Size="Size.Large">Authroize</MudButton>
+        }
+        else if ((_isAuthorized || _isParametersProvided) && _groupData is not null)
+        {
+            <MudGrid>
+                <MudItem xs="12" Class="d-flex justify-space-between align-center">
+                    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => NavigateTo()"/>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Logout" Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async () => await Logout())" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudPaper Class="d-flex pa-4 gap-2">
+                        <div>
+                            <MudAvatar Size="Size.Large">
+                                <MudImage Src="@_groupData.Photo200"></MudImage>
+                            </MudAvatar>
+                        </div>
+
+                        <div class="flex-grow-1 align-self-center">
+                            <MudText>
+                                @_groupData.Name (Id: @_groupData.Id) <br />
+                                Subscribers: @_groupData.MembersCount
+                            </MudText>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" Class="d-flex justify-space-between align-center">
+                    <MudIconButton Icon="@Icons.Material.Filled.Home" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => NavigateTo()" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Logout" Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async () => await Logout())"/>
+                </MudItem>
+
+                <MudItem xs="12" Class="d-flex justify-space-between align-center">
+                    <MudPaper Class="pa-4 gap-2">
+                        <MudText>
+                            Token is expired or invalid, or maybe group id in appsettings is null.
+                        </MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        }
+
+    </div>
+}

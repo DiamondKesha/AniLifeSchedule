@@ -1,0 +1,67 @@
+﻿@using AniLifeSchedule.Models.Enums
+
+<MudDialog>
+
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="ScheduleModel.Titles.Romaji" Label="Romaji title" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="ScheduleModel.Titles.Russian" Label="Russian title" />
+            </MudItem>
+
+            <MudItem xs="12" md="4">
+                <MudTextField T="DateTime" @bind-Value="ScheduleModel.EpisodeReleaseDate" Label="Release date" InputType="InputType.DateTimeLocal" Format="s" />
+            </MudItem>
+
+            <MudItem xs="12" md="4">
+                <MudTextField @bind-Value="ScheduleModel.CurrentAiringEpisode" Label="Current episode" />
+            </MudItem>
+
+            <MudItem xs="12" md="4">
+                <MudTextField @bind-Value="ScheduleModel.Episodes" Label="Episodes" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect @bind-Value="ScheduleModel.Status" Label="Status">
+                    @foreach (StatusType item in Enum.GetValues(typeof(StatusType)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect @bind-Value="ScheduleModel.Format" Label="Status">
+                    @foreach (FormatType item in Enum.GetValues(typeof(FormatType)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField @bind-Value="ScheduleModel.ImageUrl" Label="Image url" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" OnClick="Submit">Save</MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code
+{
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter] public ScheduleModel ScheduleModel { get; set; } = ScheduleModel.Create(TitleModel.Create("", ""), "", "", DateTime.Today.AddDays(1), default, FormatType.TV, StatusType.RELEASING);
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(ScheduleModel));
+
+    private void Cancel() => MudDialog.Close(DialogResult.Cancel());
+}

@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="true"/>
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <AniLifeSchedule.Components.Shared.AuthComponent />
+    </MudAppBar>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
