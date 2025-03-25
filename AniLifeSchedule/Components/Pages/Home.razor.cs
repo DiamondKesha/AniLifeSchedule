@@ -174,7 +174,7 @@ public partial class Home
         var dialog = await DialogService.ShowAsync<EditScheduleCardDialog>("");
         var dialogResult = await dialog.Result;
 
-        if (dialogResult is null || !dialogResult.Canceled || dialogResult.Data is not ScheduleModel)
+        if (dialogResult is null || dialogResult.Canceled || dialogResult.Data is not ScheduleModel)
         {
             return;
         }
