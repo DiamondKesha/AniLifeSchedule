@@ -83,7 +83,7 @@ public partial class Home
 
                 _scheduleModels.Add(ScheduleModel.Create(
                     TitleModel.Create("", item.Media.Title.Romaji),
-                    item.Media.Cover.Large,
+                    item.Media.Cover.ExtraLarge ?? item.Media.Cover.Large,
                     tempCurrentEpisode!,
                     item.Media.NextAiringEpisode?.GetTime ?? default,
                     item.Media.Episodes,

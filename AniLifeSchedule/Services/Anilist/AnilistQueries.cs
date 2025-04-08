@@ -12,7 +12,7 @@ public static class AnilistQueries
                 media {
                     nextAiringEpisode { airingAt episode }
                     title { romaji english native }
-                    coverImage { large }
+                    coverImage { extraLarge }
                     episodes
                     startDate { year month day }
                     status

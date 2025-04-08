@@ -44,28 +44,11 @@ public class ImageCreator : IDisposable
     public void ResizeAndDrawImage(SKImage image, int resizedWidth, int resizedHeight, SKPoint position)
     {
         if (image == null) return;
-        SKPaint tempPaint = paint;
 
-        paint.Reset();
-        paint.IsAntialias = true;
+        using SKBitmap bitmap = SKBitmap.FromImage(image);
+        using SKBitmap resizedBitmap = bitmap.Resize(new SKImageInfo(resizedWidth, resizedHeight), new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.Nearest));
 
-        //paint.FilterQuality = SKFilterQuality.High;
-
-        using var surface = SKSurface.Create(new SKImageInfo
-        {
-            Width = resizedWidth,
-            Height = resizedHeight,
-            ColorType = SKImageInfo.PlatformColorType,
-            AlphaType = SKAlphaType.Premul
-        });
-
-        surface.Canvas.DrawImage(image, new SKRectI(0, 0, resizedWidth, resizedHeight), paint);
-        surface.Canvas.Flush();
-
-        using var newImage = surface.Snapshot();
-        canvas.DrawImage(newImage, position, null);
-
-        paint = tempPaint;
+        canvas.DrawBitmap(resizedBitmap, position, null);
     }
 
     public string Save(string pathToSave, string filename)
